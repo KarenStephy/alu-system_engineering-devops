@@ -1,4 +1,7 @@
-ne { 'Turn off passwd auth':
+#!/usr/bin/env bash
+# puppet config
+
+file_line { 'Turn off passwd auth':
   ensure => 'present',
   path   => '/etc/ssh/ssh_config',
   line   => '    PasswordAuthentication no',
