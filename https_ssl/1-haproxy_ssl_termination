@@ -37,5 +37,5 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server 7175-web-01 3.86.237.61:80 check
-    server 7175-web-02 3.95.161.238:80 check
+    server 7175-web-01 44.201.180.86 check
+    server 7175-web-02 3.82.249.245 check
