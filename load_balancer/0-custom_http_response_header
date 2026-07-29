@@ -1,5 +1,25 @@
 #!/usr/bin/env bash
-#Track which server is handling my request
-sudo sed -i '/server_name _;/a\ add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
-sudo service nginx restart
-echo "Nginx configured with custom X-Served-By header"
+# Configuring Nginx to add a custom X-Served-By response header
+# shellcheck disable=SC2154
+apt-get update -y
+apt-get install -y nginx
+echo "Holberton School" > /var/www/html/index.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+cat > /etc/nginx/nginx.conf << 'EOF'
+events {
+}
+http {
+        server {
+                listen 80 default_server;
+                root /var/www/html;
+                index index.html;
+                add_header X-Served-By $hostname always;
+                error_page 404 /404.html;
+                location /redirect_me {
+                        return 301 https://google.com;
+                }
+        }
+}
+EOF
+nginx -t
+service nginx restart
