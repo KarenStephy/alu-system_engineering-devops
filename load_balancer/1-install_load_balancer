@@ -5,21 +5,20 @@
 apt-get update -y
 apt-get install -y haproxy
 
-# Let HAProxy be managed as a service (init script)
+# Let HAProxy be managed as a service
 sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
 
-# Append the frontend/backend configuration
-{
-    echo "frontend http_front"
-    echo "    bind *:80"
-    echo "    stats uri /haproxy?stats"
-    echo "    default_backend http_back"
-    echo ""
-    echo "backend http_back"
-    echo "    balance roundrobin"
-    echo "    server 7143-web-01 44.201.180.86:80 check"
-    echo "    server 7143-web-02 3.82.249.245:80 check"
-} >> /etc/haproxy/haproxy.cfg
+cat >> /etc/haproxy/haproxy.cfg << EOF
+
+frontend http_front
+    bind *:80
+    stats uri /haproxy?stats
+    default_backend http_back
+
+backend http_back
+    balance roundrobin
+    server 7143-web-01 44.201.180.86:80 check
+    server 7143-web-02 3.82.249.245:80 check
+EOF
 
 service haproxy restart
-
